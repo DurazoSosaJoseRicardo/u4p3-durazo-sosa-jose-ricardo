@@ -28,6 +28,17 @@ class ServicioForm(forms.ModelForm):
         # devuelve el valor limpio para que el formulario lo use
         return precio
 
+      # clean_titulo: NUEVO; Django lo llama solo porque se llama clean_ + nombre del campo
+    def clean_titulo(self):
+        # cleaned_data['titulo']: el texto que escribió el usuario
+        titulo = self.cleaned_data['titulo']
+        # len(titulo) < 5: cuenta los caracteres; menos de 5 no se acepta
+        if len(titulo) < 5:
+            # ValidationError: el formulario queda inválido y el mensaje sale junto al campo
+            raise ValidationError('El título debe tener al menos 5 caracteres.')
+        # return: sin esta línea el título llegaría vacío (None) y fallaría al guardar
+        return titulo
+
 
 # CategoriaForm: NUEVO formulario para dar de alta y editar categorías
 class CategoriaForm(forms.ModelForm):
